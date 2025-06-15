@@ -1,21 +1,11 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { X, ChevronLeft, ChevronRight, Calendar } from "lucide-react";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { X } from "lucide-react";
 
 const BookingsTab = () => {
   const [activeFilter, setActiveFilter] = useState("All");
   const [selectedDates, setSelectedDates] = useState<Set<string>>(new Set());
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [isYearPickerOpen, setIsYearPickerOpen] = useState(false);
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   
   const filters = ["All", "Upcoming", "Pending", "Completed", "Cancelled"];
   
@@ -55,15 +45,16 @@ const BookingsTab = () => {
     }
   ];
 
-  // Generate calendar days based on current month
+  // Generate calendar days (current week + 21 future days)
   const generateCalendarDays = () => {
     const days = [];
-    const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
     const today = new Date();
+    const currentWeekStart = new Date(today);
+    currentWeekStart.setDate(today.getDate() - today.getDay()); // Start of current week
 
     for (let i = 0; i < 28; i++) {
-      const date = new Date(startOfMonth);
-      date.setDate(startOfMonth.getDate() + i);
+      const date = new Date(currentWeekStart);
+      date.setDate(currentWeekStart.getDate() + i);
       
       const isPast = date < today && date.toDateString() !== today.toDateString();
       const weekday = date.toLocaleDateString('en', { weekday: 'short' });
@@ -104,38 +95,6 @@ const BookingsTab = () => {
     setSelectedDates(new Set());
   };
 
-  const handleMonthChange = (direction: 'prev' | 'next') => {
-    const newDate = new Date(currentDate);
-    if (direction === 'prev') {
-      newDate.setMonth(currentDate.getMonth() - 1);
-    } else {
-      newDate.setMonth(currentDate.getMonth() + 1);
-    }
-    setCurrentDate(newDate);
-    setSelectedDates(new Set()); // Clear selected dates when changing month
-  };
-
-  const handleYearSave = () => {
-    const newDate = new Date(selectedYear, 0, 1); // January 1st of selected year
-    setCurrentDate(newDate);
-    setSelectedDates(new Set()); // Clear selected dates when changing year
-    setIsYearPickerOpen(false);
-  };
-
-  const generateYearOptions = () => {
-    const currentYear = new Date().getFullYear();
-    const years = [];
-    for (let i = currentYear - 5; i <= currentYear + 5; i++) {
-      years.push(i);
-    }
-    return years;
-  };
-
-  const monthYearLabel = currentDate.toLocaleDateString('en', { 
-    month: 'short', 
-    year: 'numeric' 
-  });
-
   // Filter bookings based on selected dates and status
   const filteredBookings = bookings.filter(booking => {
     const statusMatch = activeFilter === "All" || booking.status === activeFilter.toLowerCase();
@@ -148,42 +107,6 @@ const BookingsTab = () => {
       {/* Header */}
       <div className="bg-white px-4 py-4 shadow-sm">
         <h1 className="text-2xl font-bold text-gray-900">Bookings</h1>
-      </div>
-      
-      {/* Month Switcher Row */}
-      <div className="bg-white border-b border-gray-100 px-4 py-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => handleMonthChange('prev')}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <ChevronLeft size={24} className="text-[#5E50A1]" />
-            </button>
-            
-            <button
-              onClick={() => setIsYearPickerOpen(true)}
-              className="text-base font-bold text-[#1C1C1E]"
-            >
-              {monthYearLabel}
-            </button>
-            
-            <button
-              onClick={() => handleMonthChange('next')}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <ChevronRight size={24} className="text-[#5E50A1]" />
-            </button>
-          </div>
-          
-          <button
-            onClick={() => setIsYearPickerOpen(true)}
-            className="flex items-center space-x-1 p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <Calendar size={20} className="text-[#5E50A1]" />
-            <span className="text-[#5E50A1] text-sm">▾</span>
-          </button>
-        </div>
       </div>
       
       {/* Calendar Filter Strip */}
@@ -295,41 +218,6 @@ const BookingsTab = () => {
           </div>
         )}
       </div>
-
-      {/* Year Picker Modal */}
-      <Sheet open={isYearPickerOpen} onOpenChange={setIsYearPickerOpen}>
-        <SheetContent side="bottom" className="h-[40%] rounded-t-xl">
-          <SheetHeader className="pb-4">
-            <div className="w-9 h-1 bg-gray-300 rounded-full mx-auto mb-4"></div>
-            <SheetTitle className="text-lg font-bold text-center">Select Year</SheetTitle>
-          </SheetHeader>
-          
-          <div className="flex-1 overflow-y-auto mb-4">
-            <div className="space-y-2">
-              {generateYearOptions().map((year) => (
-                <button
-                  key={year}
-                  onClick={() => setSelectedYear(year)}
-                  className={`w-full p-4 text-left rounded-lg transition-colors ${
-                    selectedYear === year
-                      ? 'bg-[#AFBCEB] text-[#5E50A1] font-semibold'
-                      : 'hover:bg-gray-50'
-                  }`}
-                >
-                  {year}
-                </button>
-              ))}
-            </div>
-          </div>
-          
-          <Button
-            onClick={handleYearSave}
-            className="w-full h-[52px] bg-[#5E50A1] hover:bg-[#5E50A1]/90 text-white rounded-xl"
-          >
-            Save
-          </Button>
-        </SheetContent>
-      </Sheet>
     </div>
   );
 };
