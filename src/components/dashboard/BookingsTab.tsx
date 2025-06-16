@@ -209,9 +209,9 @@ const BookingsTab = () => {
                 <div className="flex-1">
                   <h3 className="font-semibold text-[#1C1C1E]">{booking.clientName}</h3>
                 </div>
-                <badge className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(booking.status)}`}>
+                <Badge className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(booking.status)}`}>
                   {booking.status}
-                </badge>
+                </Badge>
               </div>
               
               {/* Service Info */}
@@ -304,9 +304,9 @@ const BookingsTab = () => {
                   </div>
                   <div>
                     <SheetTitle className="text-[#1C1C1E]">{selectedBooking.clientName}</SheetTitle>
-                    <badge className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(selectedBooking.status)}`}>
+                    <Badge className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(selectedBooking.status)}`}>
                       {selectedBooking.status}
-                    </badge>
+                    </Badge>
                   </div>
                 </div>
               </SheetHeader>
