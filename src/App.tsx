@@ -8,6 +8,7 @@ import WelcomeScreen from "./pages/WelcomeScreen";
 import ProviderLoginScreen from "./pages/ProviderLoginScreen";
 import ProviderRegisterStep1Screen from "./pages/ProviderRegisterStep1Screen";
 import ProviderRegisterStep2Screen from "./pages/ProviderRegisterStep2Screen";
+import ProviderCategorySelectionScreen from "./pages/ProviderCategorySelectionScreen";
 import ProviderPhoneOTPScreen from "./pages/ProviderPhoneOTPScreen";
 import ProviderSuccessScreen from "./pages/ProviderSuccessScreen";
 import ProviderDashboardTabs from "./pages/ProviderDashboardTabs";
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/provider/login" element={<ProviderLoginScreen />} />
           <Route path="/provider/register-step1" element={<ProviderRegisterStep1Screen />} />
           <Route path="/provider/register-step2" element={<ProviderRegisterStep2Screen />} />
+          <Route path="/provider/categories" element={<ProviderCategorySelectionScreen />} />
           <Route path="/provider/phone-otp" element={<ProviderPhoneOTPScreen />} />
           <Route path="/provider/success" element={<ProviderSuccessScreen />} />
           <Route path="/provider/dashboard" element={<ProviderDashboardTabs />} />

@@ -21,7 +21,7 @@ const ProviderRegisterStep2Screen = () => {
   };
 
   const handleContinue = () => {
-    navigate("/provider/phone-otp");
+    navigate("/provider/categories");
   };
 
   return (
