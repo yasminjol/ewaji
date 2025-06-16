@@ -2,10 +2,10 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { X, ChevronLeft, ChevronRight, CalendarIcon, Phone, Mail, Check } from "lucide-react";
-import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from "date-fns";
+import { format, addMonths, subMonths } from "date-fns";
 
 interface Booking {
   id: number;
@@ -30,6 +30,7 @@ const BookingsTab = () => {
   const [activeFilter, setActiveFilter] = useState("All");
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [isDetailSheetOpen, setIsDetailSheetOpen] = useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isYearPickerOpen, setIsYearPickerOpen] = useState(false);
   
   const filters = ["All", "Upcoming", "Pending", "Completed", "Cancelled"];
@@ -47,7 +48,7 @@ const BookingsTab = () => {
       price: "$120",
       deposit: "$40",
       status: "pending",
-      clientPhone: "+1 (555) 123-4567",
+      clientPhone: "+1(555)123-4567",
       clientEmail: "maya.johnson@email.com",
       policies: ["Cancellation Policy", "Lateness Policy", "Refund Policy"]
     },
@@ -63,7 +64,7 @@ const BookingsTab = () => {
       price: "$85",
       deposit: "$25",
       status: "upcoming",
-      clientPhone: "+1 (555) 234-5678",
+      clientPhone: "+1(555)234-5678",
       clientEmail: "zara.williams@email.com",
       policies: ["Cancellation Policy", "Lateness Policy"]
     },
@@ -79,7 +80,7 @@ const BookingsTab = () => {
       price: "$200",
       deposit: "$60",
       status: "completed",
-      clientPhone: "+1 (555) 345-6789",
+      clientPhone: "+1(555)345-6789",
       clientEmail: "asha.davis@email.com",
       policies: ["Cancellation Policy", "Refund Policy"]
     }
@@ -119,9 +120,21 @@ const BookingsTab = () => {
     setIsYearPickerOpen(false);
   };
 
+  const handleDateSelect = (date: Date | undefined) => {
+    setSelectedDate(date);
+    setIsCalendarOpen(false);
+    if (date) {
+      setCurrentMonth(date);
+    }
+  };
+
   const openBookingDetails = (booking: Booking) => {
     setSelectedBooking(booking);
     setIsDetailSheetOpen(true);
+  };
+
+  const toggleCalendar = () => {
+    setIsCalendarOpen(!isCalendarOpen);
   };
 
   const years = Array.from({ length: 11 }, (_, i) => new Date().getFullYear() - 5 + i);
@@ -133,51 +146,79 @@ const BookingsTab = () => {
         <h1 className="text-2xl font-bold text-gray-900">Bookings</h1>
       </div>
       
-      {/* Month Navigation */}
+      {/* Clean Header Row - Month-Year Pill + Calendar Icon */}
       <div className="bg-white border-b border-gray-100 px-4 py-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <button 
-              onClick={handlePrevMonth}
-              className="p-2 hover:bg-gray-100 rounded-lg"
-            >
-              <ChevronLeft size={24} className="text-[#5E50A1]" />
-            </button>
-            <h2 className="text-lg font-bold text-[#1C1C1E]">
-              {format(currentMonth, "MMM yyyy")}
-            </h2>
-            <button 
-              onClick={handleNextMonth}
-              className="p-2 hover:bg-gray-100 rounded-lg"
-            >
-              <ChevronRight size={24} className="text-[#5E50A1]" />
-            </button>
+          <div className="text-lg font-bold text-[#1C1C1E]">
+            {format(selectedDate || currentMonth, "MMMM yyyy")}
           </div>
           <button 
-            onClick={() => setIsYearPickerOpen(true)}
-            className="flex items-center space-x-1 p-2 hover:bg-gray-100 rounded-lg"
+            onClick={toggleCalendar}
+            className="p-2 hover:bg-gray-100 rounded-lg"
           >
-            <CalendarIcon size={20} className="text-[#5E50A1]" />
-            <span className="text-sm text-[#5E50A1]">Year</span>
+            <CalendarIcon size={24} className="text-[#5E50A1]" />
           </button>
         </div>
       </div>
 
-      {/* Calendar */}
-      <div className="bg-white border-b border-gray-100 px-4 py-4">
-        <Calendar
-          mode="single"
-          selected={selectedDate}
-          onSelect={setSelectedDate}
-          month={currentMonth}
-          onMonthChange={setCurrentMonth}
-          className="w-full"
-          classNames={{
-            day_selected: "bg-[#5E50A1] text-white hover:bg-[#5E50A1] hover:text-white focus:bg-[#5E50A1] focus:text-white",
-            day_today: "bg-[#AFBCEB] text-[#5E50A1]"
-          }}
-        />
-      </div>
+      {/* Calendar Overlay */}
+      {isCalendarOpen && (
+        <>
+          {/* Scrim */}
+          <div 
+            className="fixed inset-0 bg-black/20 z-40"
+            onClick={() => setIsCalendarOpen(false)}
+          />
+          
+          {/* Calendar Dropdown */}
+          <div className="relative z-50">
+            <div className="bg-white mx-4 mt-2 rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+              {/* Month Navigation */}
+              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+                <div className="flex items-center space-x-4">
+                  <button 
+                    onClick={handlePrevMonth}
+                    className="p-2 hover:bg-gray-100 rounded-lg"
+                  >
+                    <ChevronLeft size={20} className="text-[#5E50A1]" />
+                  </button>
+                  <h3 className="text-base font-semibold text-[#1C1C1E]">
+                    {format(currentMonth, "MMM yyyy")}
+                  </h3>
+                  <button 
+                    onClick={handleNextMonth}
+                    className="p-2 hover:bg-gray-100 rounded-lg"
+                  >
+                    <ChevronRight size={20} className="text-[#5E50A1]" />
+                  </button>
+                </div>
+                <button 
+                  onClick={() => setIsYearPickerOpen(true)}
+                  className="text-sm text-[#5E50A1] px-3 py-1 hover:bg-[#AFBCEB]/20 rounded-lg"
+                >
+                  Year
+                </button>
+              </div>
+              
+              {/* Calendar Grid */}
+              <div className="p-4">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={handleDateSelect}
+                  month={currentMonth}
+                  onMonthChange={setCurrentMonth}
+                  className="w-full"
+                  classNames={{
+                    day_selected: "bg-[#5E50A1] text-white hover:bg-[#5E50A1] hover:text-white focus:bg-[#5E50A1] focus:text-white",
+                    day_today: "bg-[#AFBCEB] text-[#5E50A1]"
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       <div className="p-4 space-y-4">
         {/* Filter Chips */}
@@ -223,12 +264,12 @@ const BookingsTab = () => {
               {/* Action Buttons */}
               <div className="flex space-x-2">
                 {booking.status === "pending" && (
-                  <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white">
+                  <Button size="sm" className="bg-[#34C759] hover:bg-[#34C759]/90 text-white">
                     Accept
                   </Button>
                 )}
                 {(booking.status === "pending" || booking.status === "upcoming") && (
-                  <Button size="sm" variant="outline" className="border-red-200 text-red-600 hover:bg-red-50">
+                  <Button size="sm" variant="outline" className="border-[#FF3B30] text-[#FF3B30] hover:bg-[#FF3B30]/10">
                     Cancel
                   </Button>
                 )}
@@ -367,7 +408,7 @@ const BookingsTab = () => {
                 {/* Action Buttons */}
                 <div className="border-t border-gray-100 pt-4 space-y-3">
                   {selectedBooking.status === "pending" && (
-                    <Button className="w-full bg-green-600 hover:bg-green-700 text-white h-12">
+                    <Button className="w-full bg-[#34C759] hover:bg-[#34C759]/90 text-white h-12">
                       Confirm Booking
                     </Button>
                   )}
@@ -376,7 +417,7 @@ const BookingsTab = () => {
                       <Button variant="outline" className="w-full border-[#5E50A1] text-[#5E50A1] hover:bg-[#5E50A1] hover:text-white h-12">
                         Reschedule
                       </Button>
-                      <Button variant="outline" className="w-full border-red-200 text-red-600 hover:bg-red-50 h-12">
+                      <Button variant="outline" className="w-full border-[#FF3B30] text-[#FF3B30] hover:bg-[#FF3B30]/10 h-12">
                         Cancel Booking
                       </Button>
                     </>
