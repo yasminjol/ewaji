@@ -1,165 +1,145 @@
 
-import { MoreHorizontal, Heart, Bookmark, Share, Plus, Camera } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useState } from "react";
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Calendar, TrendingUp, Users, Star, BarChart3 } from 'lucide-react';
 
 const HomeTab = () => {
-  const [likedPosts, setLikedPosts] = useState<Set<number>>(new Set());
-  const [savedPosts, setSavedPosts] = useState<Set<number>>(new Set());
-
-  const posts = [
-    { id: 1, image: "/placeholder.svg", caption: "Natural glow makeup for evening events ✨", timestamp: "2h", likes: 24 },
-    { id: 2, image: "/placeholder.svg", caption: "Protective braided style perfect for summer", timestamp: "4h", likes: 18 },
-    { id: 3, image: "/placeholder.svg", caption: "Bold evening glam look 💄", timestamp: "1d", likes: 31 },
-    { id: 4, image: "/placeholder.svg", caption: "Soft curls with natural makeup", timestamp: "2d", likes: 15 },
-    { id: 5, image: "/placeholder.svg", caption: "Color pop lips for the weekend", timestamp: "3d", likes: 22 },
-  ];
-
-  const aiStories = [
-    { id: 1, image: "/placeholder.svg", name: "Soft Glam" },
-    { id: 2, image: "/placeholder.svg", name: "Natural Curls" },
-    { id: 3, image: "/placeholder.svg", name: "Bold Lips" },
-    { id: 4, image: "/placeholder.svg", name: "Braided Crown" },
-    { id: 5, image: "/placeholder.svg", name: "Smokey Eyes" },
-  ];
-
-  const toggleLike = (postId: number) => {
-    setLikedPosts(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(postId)) {
-        newSet.delete(postId);
-      } else {
-        newSet.add(postId);
-      }
-      return newSet;
-    });
+  const handleNavigateToMetrics = () => {
+    window.location.href = '/provider/metrics';
   };
-
-  const toggleSave = (postId: number) => {
-    setSavedPosts(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(postId)) {
-        newSet.delete(postId);
-      } else {
-        newSet.add(postId);
-      }
-      return newSet;
-    });
-  };
-
-  const renderFeedCard = (post: any) => (
-    <div key={post.id} className="bg-white mb-6">
-      {/* Card Header */}
-      <div className="flex items-center justify-between p-3">
-        <div className="flex items-center space-x-3">
-          <Avatar className="w-8 h-8">
-            <AvatarImage src="/placeholder.svg" alt="Sarah Williams" />
-            <AvatarFallback>SW</AvatarFallback>
-          </Avatar>
-          <span className="font-semibold text-sm text-gray-900">Sarah Williams</span>
-        </div>
-        <button className="p-1 text-gray-400 hover:text-gray-600">
-          <MoreHorizontal size={20} />
-        </button>
-      </div>
-
-      {/* Media */}
-      <div className="px-3">
-        <div className="w-full aspect-square bg-gray-200 rounded-xl overflow-hidden">
-          <img src={post.image} alt={post.caption} className="w-full h-full object-cover" />
-        </div>
-      </div>
-
-      {/* Action Row */}
-      <div className="p-3 space-y-2">
-        <div className="flex items-center space-x-4">
-          <button 
-            onClick={() => toggleLike(post.id)}
-            className={`p-1 ${likedPosts.has(post.id) ? 'text-red-500' : 'text-gray-600'} hover:text-red-500 transition-colors`}
-          >
-            <Heart size={24} fill={likedPosts.has(post.id) ? 'currentColor' : 'none'} />
-          </button>
-          <button 
-            onClick={() => toggleSave(post.id)}
-            className={`p-1 ${savedPosts.has(post.id) ? 'text-[#5E50A1]' : 'text-gray-600'} hover:text-[#5E50A1] transition-colors`}
-          >
-            <Bookmark size={24} fill={savedPosts.has(post.id) ? 'currentColor' : 'none'} />
-          </button>
-          <button className="p-1 text-gray-600 hover:text-[#5E50A1] transition-colors">
-            <Share size={24} />
-          </button>
-        </div>
-
-        {/* Caption */}
-        <div className="space-y-1">
-          <p className="text-sm text-gray-900 line-clamp-2">
-            <span className="font-semibold">Sarah Williams</span> {post.caption}
-          </p>
-          <p className="text-xs text-gray-500">{post.timestamp}</p>
-        </div>
-      </div>
-    </div>
-  );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Top App Bar */}
-      <div className="bg-white px-4 py-3 shadow-sm sticky top-0 z-10">
-        <div className="flex items-center justify-between">
-          <Avatar className="w-8 h-8">
-            <AvatarImage src="/placeholder.svg" alt="Profile" />
-            <AvatarFallback>SW</AvatarFallback>
-          </Avatar>
-          
-          <h1 className="text-lg font-bold text-[#5E50A1]">EWAJI</h1>
-          
-          <button className="p-2 text-[#5E50A1] hover:bg-gray-100 rounded-full">
-            <Plus size={24} />
-          </button>
-        </div>
+    <div className="p-4 space-y-6">
+      {/* Welcome Header */}
+      <div className="text-center py-6">
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome back, Sarah!</h1>
+        <p className="text-gray-600">Here's what's happening with your business</p>
       </div>
 
-      {/* AI Discovery Stories Bar */}
-      <div className="bg-white border-b border-gray-100">
-        <div className="h-[100px] px-4 py-3">
-          <div className="flex space-x-3 overflow-x-auto pb-2">
-            {aiStories.map((story) => (
-              <div key={story.id} className="flex-shrink-0 w-20 flex flex-col items-center">
-                <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-gray-200">
-                  <img src={story.image} alt={story.name} className="w-full h-full object-cover" />
-                  <div className="absolute bottom-1 right-1 w-4 h-4 bg-[#AFBCEB] rounded-full flex items-center justify-center">
-                    <span className="text-[8px] font-bold text-[#1C1C1E]">AI</span>
-                  </div>
+      {/* Quick Stats */}
+      <div className="grid grid-cols-2 gap-4">
+        <Card className="bg-[#5E50A1] text-white">
+          <CardContent className="p-4 text-center">
+            <TrendingUp size={24} className="mx-auto mb-2" />
+            <div className="text-2xl font-bold">$1,240</div>
+            <div className="text-sm opacity-90">This Month</div>
+          </CardContent>
+        </Card>
+        
+        <Card className="bg-[#AFBCEB] text-white">
+          <CardContent className="p-4 text-center">
+            <Calendar size={24} className="mx-auto mb-2" />
+            <div className="text-2xl font-bold">32</div>
+            <div className="text-sm opacity-90">Bookings</div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="space-y-3">
+        <h2 className="text-lg font-semibold text-gray-900">Quick Actions</h2>
+        
+        <Card className="shadow-sm">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-full bg-[#5E50A1] bg-opacity-10 flex items-center justify-center">
+                  <BarChart3 size={20} className="text-[#5E50A1]" />
                 </div>
-                <span className="text-xs text-center mt-1 text-gray-700 truncate w-full">{story.name}</span>
+                <div>
+                  <div className="font-medium text-gray-900">View Analytics</div>
+                  <div className="text-sm text-gray-600">See your business metrics</div>
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={handleNavigateToMetrics}
+                className="text-[#5E50A1] hover:bg-[#5E50A1] hover:bg-opacity-10"
+              >
+                View
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-sm">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-full bg-[#5E50A1] bg-opacity-10 flex items-center justify-center">
+                  <Calendar size={20} className="text-[#5E50A1]" />
+                </div>
+                <div>
+                  <div className="font-medium text-gray-900">Manage Bookings</div>
+                  <div className="text-sm text-gray-600">View and update appointments</div>
+                </div>
+              </div>
+              <Button variant="ghost" size="sm" className="text-[#5E50A1] hover:bg-[#5E50A1] hover:bg-opacity-10">
+                Manage
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-sm">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-full bg-[#5E50A1] bg-opacity-10 flex items-center justify-center">
+                  <Users size={20} className="text-[#5E50A1]" />
+                </div>
+                <div>
+                  <div className="font-medium text-gray-900">Client Messages</div>
+                  <div className="text-sm text-gray-600">3 new messages</div>
+                </div>
+              </div>
+              <Button variant="ghost" size="sm" className="text-[#5E50A1] hover:bg-[#5E50A1] hover:bg-opacity-10">
+                View
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
-      {/* Feed Content */}
-      <div className="pb-20">
-        {posts.length > 0 ? (
-          <div className="pt-4">
-            {posts.map((post) => renderFeedCard(post))}
-          </div>
-        ) : (
-          /* Empty State */
-          <div className="flex flex-col items-center justify-center min-h-[60vh] px-6">
-            <div className="w-16 h-16 border-2 border-[#AFBCEB] rounded-full flex items-center justify-center mb-4">
-              <Camera size={32} className="text-[#AFBCEB]" />
+      {/* Recent Activity */}
+      <div className="space-y-3">
+        <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
+        
+        <Card className="shadow-sm">
+          <CardContent className="p-4 space-y-3">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                <Star size={16} className="text-green-600" />
+              </div>
+              <div className="flex-1">
+                <div className="text-sm font-medium">New 5-star review from Maya</div>
+                <div className="text-xs text-gray-600">2 hours ago</div>
+              </div>
             </div>
-            <h3 className="text-lg font-bold text-gray-900 mb-2">Share your first look</h3>
-            <p className="text-gray-600 text-center mb-6">
-              Upload photos or videos to showcase your work.
-            </p>
-            <Button className="bg-[#5E50A1] hover:bg-[#4F4391] text-white">
-              Add Post
-            </Button>
-          </div>
-        )}
+            
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                <Calendar size={16} className="text-blue-600" />
+              </div>
+              <div className="flex-1">
+                <div className="text-sm font-medium">Knotless braids booking confirmed</div>
+                <div className="text-xs text-gray-600">5 hours ago</div>
+              </div>
+            </div>
+            
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
+                <TrendingUp size={16} className="text-purple-600" />
+              </div>
+              <div className="flex-1">
+                <div className="text-sm font-medium">Weekly earnings: $340</div>
+                <div className="text-xs text-gray-600">1 day ago</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
