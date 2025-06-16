@@ -12,7 +12,6 @@ import ProviderCategorySelectionScreen from "./pages/ProviderCategorySelectionSc
 import ProviderPhoneOTPScreen from "./pages/ProviderPhoneOTPScreen";
 import ProviderSuccessScreen from "./pages/ProviderSuccessScreen";
 import ProviderDashboardTabs from "./pages/ProviderDashboardTabs";
-import MetricsScreen from "./pages/MetricsScreen";
 import ClientLoginScreen from "./pages/ClientLoginScreen";
 
 const queryClient = new QueryClient();
@@ -32,7 +31,6 @@ const App = () => (
           <Route path="/provider/phone-otp" element={<ProviderPhoneOTPScreen />} />
           <Route path="/provider/success" element={<ProviderSuccessScreen />} />
           <Route path="/provider/dashboard" element={<ProviderDashboardTabs />} />
-          <Route path="/provider/metrics" element={<MetricsScreen />} />
           <Route path="/client/login" element={<ClientLoginScreen />} />
         </Routes>
       </BrowserRouter>
