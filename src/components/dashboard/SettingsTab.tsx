@@ -1,4 +1,3 @@
-
 import { 
   User, 
   CreditCard, 
@@ -12,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import AccountInfoScreen from "./AccountInfoScreen";
+import MetricsScreen from "./MetricsScreen";
 
 const SettingsTab = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -51,7 +51,7 @@ const SettingsTab = () => {
       title: "Metrics",
       caption: "Performance analytics",
       icon: BarChart3,
-      action: () => console.log("Navigate to Metrics")
+      action: () => setCurrentScreen("metrics")
     },
     {
       id: 6,
@@ -64,6 +64,10 @@ const SettingsTab = () => {
 
   if (currentScreen === "account-info") {
     return <AccountInfoScreen onBack={() => setCurrentScreen("main")} />;
+  }
+
+  if (currentScreen === "metrics") {
+    return <MetricsScreen onBack={() => setCurrentScreen("main")} />;
   }
 
   return (
