@@ -20,20 +20,25 @@ const ClientLoginScreen = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const handleLogin = () => {
+    // Add login logic here
+    navigate("/client/home");
+  };
+
+  const handleSocialLogin = (provider: string) => {
+    console.log(`Logging in with ${provider}`);
+    // Add social login logic here
+    navigate("/client/home");
+  };
+
   return (
     <div className="min-h-screen ewaji-gradient flex items-center justify-center px-6">
       <div className="w-full max-w-sm bg-white rounded-2xl p-8 shadow-lg">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Client Login
+          <h1 className="text-3xl font-bold text-gray-900 mb-6">
+            EWAJI
           </h1>
-          <p className="text-gray-600">
-            Don't have an account?{" "}
-            <button className="text-[#5E50A1] font-semibold hover:underline">
-              Register
-            </button>
-          </p>
         </div>
 
         {/* Form */}
@@ -75,19 +80,25 @@ const ClientLoginScreen = () => {
             </div>
           </div>
 
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="remember"
-              checked={formData.rememberMe}
-              onCheckedChange={(checked) => handleInputChange("rememberMe", checked as boolean)}
-            />
-            <Label htmlFor="remember" className="text-gray-600 text-sm">
-              Remember me
-            </Label>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="remember"
+                checked={formData.rememberMe}
+                onCheckedChange={(checked) => handleInputChange("rememberMe", checked as boolean)}
+              />
+              <Label htmlFor="remember" className="text-gray-600 text-sm">
+                Remember me
+              </Label>
+            </div>
+            <button className="text-[#5E50A1] text-sm font-medium hover:underline">
+              Forgot Password?
+            </button>
           </div>
 
           <Button
-            className="w-full h-14 rounded-xl text-lg font-semibold bg-[#5E50A1] text-white hover:bg-[#4F4391] transition-colors"
+            onClick={handleLogin}
+            className="w-full h-12 rounded-xl text-lg font-semibold bg-[#5E50A1] text-white hover:bg-[#4F4391] transition-colors"
           >
             Log In
           </Button>
@@ -98,24 +109,45 @@ const ClientLoginScreen = () => {
               <div className="w-full border-t border-gray-200" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-500">or</span>
+              <span className="px-4 bg-white text-gray-500">OR</span>
             </div>
           </div>
 
           {/* Social Login */}
           <div className="space-y-3">
             <Button
+              onClick={() => handleSocialLogin("Apple")}
+              variant="outline"
+              className="w-full h-12 rounded-xl border-gray-200 text-gray-700 hover:bg-gray-50"
+            >
+              Continue with Apple
+            </Button>
+            <Button
+              onClick={() => handleSocialLogin("Google")}
               variant="outline"
               className="w-full h-12 rounded-xl border-gray-200 text-gray-700 hover:bg-gray-50"
             >
               Continue with Google
             </Button>
             <Button
+              onClick={() => handleSocialLogin("Facebook")}
               variant="outline"
               className="w-full h-12 rounded-xl border-gray-200 text-gray-700 hover:bg-gray-50"
             >
               Continue with Facebook
             </Button>
+          </div>
+
+          <div className="text-center">
+            <p className="text-gray-600">
+              Don't have an account?{" "}
+              <button
+                onClick={() => navigate("/client/register-step1")}
+                className="text-[#5E50A1] font-semibold hover:underline"
+              >
+                Register
+              </button>
+            </p>
           </div>
         </div>
       </div>

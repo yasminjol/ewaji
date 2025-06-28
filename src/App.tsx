@@ -13,6 +13,8 @@ import ProviderPhoneOTPScreen from "./pages/ProviderPhoneOTPScreen";
 import ProviderSuccessScreen from "./pages/ProviderSuccessScreen";
 import ProviderDashboardTabs from "./pages/ProviderDashboardTabs";
 import ClientLoginScreen from "./pages/ClientLoginScreen";
+import ClientRegisterStep1Screen from "./pages/ClientRegisterStep1Screen";
+import ClientRegisterStep2Screen from "./pages/ClientRegisterStep2Screen";
 import ClientApp from "./pages/ClientApp";
 
 const queryClient = new QueryClient();
@@ -33,6 +35,8 @@ const App = () => (
           <Route path="/provider/success" element={<ProviderSuccessScreen />} />
           <Route path="/provider/dashboard" element={<ProviderDashboardTabs />} />
           <Route path="/client/login" element={<ClientLoginScreen />} />
+          <Route path="/client/register-step1" element={<ClientRegisterStep1Screen />} />
+          <Route path="/client/register-step2" element={<ClientRegisterStep2Screen />} />
           <Route path="/client/*" element={<ClientApp />} />
         </Routes>
       </BrowserRouter>
