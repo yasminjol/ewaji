@@ -13,6 +13,7 @@ import ProviderPhoneOTPScreen from "./pages/ProviderPhoneOTPScreen";
 import ProviderSuccessScreen from "./pages/ProviderSuccessScreen";
 import ProviderDashboardTabs from "./pages/ProviderDashboardTabs";
 import ClientLoginScreen from "./pages/ClientLoginScreen";
+import ClientApp from "./pages/ClientApp";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/provider/success" element={<ProviderSuccessScreen />} />
           <Route path="/provider/dashboard" element={<ProviderDashboardTabs />} />
           <Route path="/client/login" element={<ClientLoginScreen />} />
+          <Route path="/client/*" element={<ClientApp />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
