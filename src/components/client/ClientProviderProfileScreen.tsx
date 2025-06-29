@@ -1,15 +1,17 @@
-
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, Heart, Star, MapPin, CheckCircle, Share2, Calendar, Clock, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import BookingAvailabilityDrawer from "./BookingAvailabilityDrawer";
 
 const ClientProviderProfileScreen = () => {
   const navigate = useNavigate();
   const { providerId } = useParams();
   const [isSaved, setIsSaved] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isBookingDrawerOpen, setIsBookingDrawerOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<any>(null);
 
   // Mock provider data - in real app this would come from API
   const provider = {
@@ -64,6 +66,16 @@ const ClientProviderProfileScreen = () => {
     { stars: 2, percentage: 2 },
     { stars: 1, percentage: 0 }
   ];
+
+  const handleViewAvailability = (service?: any) => {
+    setSelectedService(service);
+    setIsBookingDrawerOpen(true);
+  };
+
+  const handleBookService = (service: any) => {
+    setSelectedService(service);
+    setIsBookingDrawerOpen(true);
+  };
 
   return (
     <div className="bg-white min-h-screen">
@@ -159,7 +171,10 @@ const ClientProviderProfileScreen = () => {
             ))}
           </div>
           
-          <Button className="w-full bg-[#5E50A1] hover:bg-[#4F4391] text-white font-semibold py-3 rounded-xl">
+          <Button 
+            onClick={() => handleViewAvailability()}
+            className="w-full bg-[#5E50A1] hover:bg-[#4F4391] text-white font-semibold py-3 rounded-xl"
+          >
             <Calendar size={18} className="mr-2" />
             View Availability
           </Button>
@@ -195,7 +210,11 @@ const ClientProviderProfileScreen = () => {
                           </div>
                         </div>
                         
-                        <Button size="sm" className="bg-[#5E50A1] hover:bg-[#4F4391] text-white text-xs px-4 py-2 rounded-lg ml-4">
+                        <Button 
+                          size="sm" 
+                          onClick={() => handleBookService(service)}
+                          className="bg-[#5E50A1] hover:bg-[#4F4391] text-white text-xs px-4 py-2 rounded-lg ml-4"
+                        >
                           Book Now
                         </Button>
                       </div>
@@ -330,11 +349,22 @@ const ClientProviderProfileScreen = () => {
             <Share2 size={16} />
           </Button>
           
-          <Button className="flex-1 bg-[#5E50A1] hover:bg-[#4F4391] text-white font-semibold py-3 rounded-xl">
+          <Button 
+            onClick={() => handleViewAvailability()}
+            className="flex-1 bg-[#5E50A1] hover:bg-[#4F4391] text-white font-semibold py-3 rounded-xl"
+          >
             Book Appointment
           </Button>
         </div>
       </div>
+
+      {/* Booking Availability Drawer */}
+      <BookingAvailabilityDrawer
+        isOpen={isBookingDrawerOpen}
+        onClose={() => setIsBookingDrawerOpen(false)}
+        provider={{ name: provider.name, id: provider.id }}
+        selectedService={selectedService}
+      />
     </div>
   );
 };
