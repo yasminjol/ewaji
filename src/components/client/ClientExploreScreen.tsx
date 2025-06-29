@@ -1,10 +1,11 @@
-
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Search, Filter, ArrowLeft, Star, Heart, MapPin } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 const ClientExploreScreen = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("Braids");
   const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>([]);
@@ -129,6 +130,10 @@ const ClientExploreScreen = () => {
     }
   };
 
+  const handleProviderClick = (providerId: number) => {
+    navigate(`/client/provider/${providerId}`);
+  };
+
   const getCurrentSubLevel = () => {
     let current = subcategories[activeCategory];
     for (const sub of selectedSubcategories) {
@@ -223,7 +228,11 @@ const ClientExploreScreen = () => {
             
             <div className="grid grid-cols-1 gap-4">
               {providers.map((provider) => (
-                <div key={provider.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-200">
+                <div 
+                  key={provider.id} 
+                  onClick={() => handleProviderClick(provider.id)}
+                  className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-200 cursor-pointer"
+                >
                   <div className="flex">
                     <div className="w-28 h-28 relative">
                       <img 

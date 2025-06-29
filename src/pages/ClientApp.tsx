@@ -10,6 +10,7 @@ import ClientProfileScreen from "@/components/client/ClientProfileScreen";
 import ClientPaymentsScreen from "@/components/client/ClientPaymentsScreen";
 import ClientSettingsScreen from "@/components/client/ClientSettingsScreen";
 import ClientHelpScreen from "@/components/client/ClientHelpScreen";
+import ClientProviderProfileScreen from "@/components/client/ClientProviderProfileScreen";
 
 const ClientApp = () => {
   return (
@@ -18,6 +19,7 @@ const ClientApp = () => {
         <Routes>
           <Route path="/home" element={<ClientHomeScreen />} />
           <Route path="/explore" element={<ClientExploreScreen />} />
+          <Route path="/provider/:providerId" element={<ClientProviderProfileScreen />} />
           <Route path="/appointments" element={<ClientAppointmentsScreen />} />
           <Route path="/inbox" element={<ClientInboxScreen />} />
           <Route path="/profile" element={<ClientProfileScreen />} />
