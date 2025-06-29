@@ -1,10 +1,12 @@
-
 import { useState, useEffect } from "react";
 import { Search, Heart, MessageCircle, Bookmark, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import QuickBookingDrawer from "@/components/client/QuickBookingDrawer";
 
 const ClientHomeScreen = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [bookingDrawerOpen, setBookingDrawerOpen] = useState(false);
+  const [selectedProvider, setSelectedProvider] = useState<{name: string; id: number; avatar?: string} | null>(null);
 
   const aiPicks = [
     {
@@ -58,6 +60,15 @@ const ClientHomeScreen = () => {
     return () => clearInterval(interval);
   }, [aiPicks.length]);
 
+  const handleBookNow = (providerName: string, providerId: number) => {
+    setSelectedProvider({
+      name: providerName,
+      id: providerId,
+      avatar: "/placeholder.svg"
+    });
+    setBookingDrawerOpen(true);
+  };
+
   return (
     <div className="bg-white min-h-screen">
       {/* Top Bar */}
@@ -85,7 +96,10 @@ const ClientHomeScreen = () => {
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
                   <h3 className="text-white font-semibold">{pick.providerName}</h3>
                   <p className="text-white/90 text-sm">{pick.service}</p>
-                  <Button className="mt-2 bg-[#5E50A1] hover:bg-[#4F4391] text-white text-sm px-4 py-2 rounded-lg">
+                  <Button 
+                    onClick={() => handleBookNow(pick.providerName, pick.id)}
+                    className="mt-2 bg-[#5E50A1] hover:bg-[#4F4391] text-white text-sm px-4 py-2 rounded-lg"
+                  >
                     Book Now
                   </Button>
                 </div>
@@ -145,13 +159,25 @@ const ClientHomeScreen = () => {
                 <span className="font-medium">{post.provider.name}</span> {post.caption}
               </p>
               
-              <Button className="mt-3 w-full bg-[#5E50A1] hover:bg-[#4F4391] text-white rounded-lg">
+              <Button 
+                onClick={() => handleBookNow(post.provider.name, post.id)}
+                className="mt-3 w-full bg-[#5E50A1] hover:bg-[#4F4391] text-white rounded-lg"
+              >
                 Book Now
               </Button>
             </div>
           </div>
         ))}
       </div>
+
+      {/* Quick Booking Drawer */}
+      {selectedProvider && (
+        <QuickBookingDrawer
+          isOpen={bookingDrawerOpen}
+          onClose={() => setBookingDrawerOpen(false)}
+          provider={selectedProvider}
+        />
+      )}
     </div>
   );
 };

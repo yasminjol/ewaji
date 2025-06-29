@@ -1,12 +1,14 @@
-
 import { MoreHorizontal, Heart, Bookmark, Share, Plus, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState } from "react";
+import QuickBookingDrawer from "@/components/client/QuickBookingDrawer";
 
 const HomeTab = () => {
   const [likedPosts, setLikedPosts] = useState<Set<number>>(new Set());
   const [savedPosts, setSavedPosts] = useState<Set<number>>(new Set());
+  const [bookingDrawerOpen, setBookingDrawerOpen] = useState(false);
+  const [selectedProvider, setSelectedProvider] = useState<{name: string; id: number; avatar?: string} | null>(null);
 
   const posts = [
     { id: 1, image: "/placeholder.svg", caption: "Natural glow makeup for evening events ✨", timestamp: "2h", likes: 24 },
@@ -46,6 +48,15 @@ const HomeTab = () => {
       }
       return newSet;
     });
+  };
+
+  const handleBookNow = () => {
+    setSelectedProvider({
+      name: "Sarah Williams",
+      id: 1,
+      avatar: "/placeholder.svg"
+    });
+    setBookingDrawerOpen(true);
   };
 
   const renderFeedCard = (post: any) => (
@@ -98,6 +109,14 @@ const HomeTab = () => {
           </p>
           <p className="text-xs text-gray-500">{post.timestamp}</p>
         </div>
+
+        {/* Book Now Button */}
+        <Button 
+          onClick={handleBookNow}
+          className="w-full bg-[#5E50A1] hover:bg-[#4F4391] text-white rounded-lg"
+        >
+          Book Now
+        </Button>
       </div>
     </div>
   );
@@ -161,6 +180,15 @@ const HomeTab = () => {
           </div>
         )}
       </div>
+
+      {/* Quick Booking Drawer */}
+      {selectedProvider && (
+        <QuickBookingDrawer
+          isOpen={bookingDrawerOpen}
+          onClose={() => setBookingDrawerOpen(false)}
+          provider={selectedProvider}
+        />
+      )}
     </div>
   );
 };
