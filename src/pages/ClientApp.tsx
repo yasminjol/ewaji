@@ -4,7 +4,6 @@ import { Routes, Route } from "react-router-dom";
 import ClientBottomNav from "@/components/client/ClientBottomNav";
 import ClientHomeScreen from "@/components/client/ClientHomeScreen";
 import ClientExploreScreen from "@/components/client/ClientExploreScreen";
-import ClientProviderProfileScreen from "@/components/client/ClientProviderProfileScreen";
 import ClientAppointmentsScreen from "@/components/client/ClientAppointmentsScreen";
 import ClientInboxScreen from "@/components/client/ClientInboxScreen";
 import ClientProfileScreen from "@/components/client/ClientProfileScreen";
@@ -19,7 +18,6 @@ const ClientApp = () => {
         <Routes>
           <Route path="/home" element={<ClientHomeScreen />} />
           <Route path="/explore" element={<ClientExploreScreen />} />
-          <Route path="/provider/:id" element={<ClientProviderProfileScreen />} />
           <Route path="/appointments" element={<ClientAppointmentsScreen />} />
           <Route path="/inbox" element={<ClientInboxScreen />} />
           <Route path="/profile" element={<ClientProfileScreen />} />
