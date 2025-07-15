@@ -1,29 +1,49 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'features/auth/welcome_screen.dart';
 import 'features/auth/provider_login_screen.dart';
 import 'features/auth/client_login_screen.dart';
 import 'features/auth/provider_register_step1_screen.dart';
 import 'features/auth/provider_register_step2_screen.dart';
-import 'features/auth/provider_category_selection_screen.dart';
+import 'features/auth/screens/provider_category_selection_screen_step2.dart';
 import 'features/auth/provider_phone_otp_screen.dart';
 import 'features/auth/provider_success_screen.dart';
 import 'features/auth/client_register_step1_screen.dart';
 import 'features/auth/client_register_step2_screen.dart';
 import 'features/provider/provider_dashboard_tabs.dart';
-import 'features/client/client_app.dart';
+import 'features/client/client_app_with_personalisation.dart';
+import 'features/client/screens/personalisation_demo.dart';
+import 'features/client/screens/personalisation_wizard_screen.dart';
+import 'features/client/cubit/personalisation_cubit.dart';
+import 'features/discovery/presentation/pages/discovery_page.dart';
+import 'service_detail_demo.dart';
+import 'booking_demo.dart';
+import 'notification_demo.dart';
 
-void main() {
-  runApp(const ProviderScope(child: EwajiApp()));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize HydratedBloc storage for state persistence
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: await getApplicationDocumentsDirectory(),
+  );
+  
+  // Skip Firebase initialization for now to avoid white screen
+  // TODO: Configure Firebase properly
+  // await AuthInitializer.initialize();
+  
+  runApp(const EwajiApp());
 }
 
-class EwajiApp extends ConsumerWidget {
+class EwajiApp extends StatelessWidget {
   const EwajiApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'EWAJI',
       theme: ThemeData(
@@ -44,6 +64,24 @@ final GoRouter _router = GoRouter(
       path: '/',
       builder: (context, state) => const WelcomeScreen(),
     ),
+    // Demo routes for testing features
+    GoRoute(
+      path: '/demo/service-detail',
+      builder: (context, state) => const ServiceDetailDemo(),
+    ),
+    GoRoute(
+      path: '/demo/booking',
+      builder: (context, state) => const BookingDemoScreen(),
+    ),
+    GoRoute(
+      path: '/demo/notifications',
+      builder: (context, state) => const NotificationDemoScreen(),
+    ),
+    GoRoute(
+      path: '/demo/personalisation',
+      builder: (context, state) => const PersonalisationDemo(),
+    ),
+    // Auth routes
     GoRoute(
       path: '/provider/login',
       builder: (context, state) => const ProviderLoginScreen(),
@@ -58,7 +96,12 @@ final GoRouter _router = GoRouter(
     ),
     GoRoute(
       path: '/provider/categories',
-      builder: (context, state) => const ProviderCategorySelectionScreen(),
+      builder: (context, state) => ProviderCategorySelectionScreenStep2(
+        onContinue: () {
+          // Navigate to phone OTP after category selection
+          GoRouter.of(context).go('/provider/phone-otp');
+        },
+      ),
     ),
     GoRoute(
       path: '/provider/phone-otp',
@@ -85,11 +128,31 @@ final GoRouter _router = GoRouter(
       builder: (context, state) => const ClientRegisterStep2Screen(),
     ),
     GoRoute(
+      path: '/client/personalisation',
+      builder: (context, state) => BlocProvider(
+        create: (context) => PersonalisationCubit(),
+        child: PersonalisationWizardScreen(
+          onComplete: () {
+            // Navigate to client dashboard after personalisation
+            context.go('/client/home');
+          },
+          onSkip: () {
+            // Navigate to client dashboard with default preferences
+            context.go('/client/home');
+          },
+        ),
+      ),
+    ),
+    GoRoute(
       path: '/client/:tab',
       builder: (context, state) {
         final tab = state.pathParameters['tab'] ?? 'home';
-        return ClientApp(initialTab: tab);
+        return ClientAppWithPersonalisation(initialTab: tab);
       },
+    ),
+    GoRoute(
+      path: '/discovery',
+      builder: (context, state) => const DiscoveryPage(),
     ),
   ],
 );

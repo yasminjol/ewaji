@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../reviews/screens/review_submission_screen.dart';
+import '../reviews/bloc/review_bloc.dart';
+import '../reviews/repository/review_repository.dart';
 
 class ClientAppointmentsScreen extends StatefulWidget {
   const ClientAppointmentsScreen({super.key});
@@ -320,16 +324,32 @@ class _ClientAppointmentsScreenState extends State<ClientAppointmentsScreen>
             ),
 
           if (appointment['status'] == 'completed')
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton(
-                onPressed: () {},
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(0xFF5E50A1),
-                  side: const BorderSide(color: Color(0xFF5E50A1)),
+            Column(
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: () {},
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: const Color(0xFF5E50A1),
+                      side: const BorderSide(color: Color(0xFF5E50A1)),
+                    ),
+                    child: const Text('Book Again'),
+                  ),
                 ),
-                child: const Text('Book Again'),
-              ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => _openReviewScreen(appointment),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF5E50A1),
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text('Write Review'),
+                  ),
+                ),
+              ],
             ),
         ],
       ),
@@ -355,5 +375,24 @@ class _ClientAppointmentsScreenState extends State<ClientAppointmentsScreen>
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  void _openReviewScreen(Map<String, dynamic> appointment) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) => ReviewBloc(
+            reviewRepository: MockReviewRepository(),
+          ),
+          child: ReviewSubmissionScreen(
+            bookingId: appointment['id'].toString(),
+            clientId: 'demo-client-123', // TODO: Get actual client ID
+            providerId: 'demo-provider-123', // TODO: Get actual provider ID  
+            providerName: appointment['provider']['name'],
+            serviceName: appointment['service'],
+          ),
+        ),
+      ),
+    );
   }
 }
