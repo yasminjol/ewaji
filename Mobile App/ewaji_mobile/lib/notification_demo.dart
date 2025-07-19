@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ewaji_mobile/core/services/notification_service.dart';
-import 'package:ewaji_mobile/core/models/notification.dart';
-import 'package:ewaji_mobile/core/utils/notification_permissions.dart';
-import 'package:ewaji_mobile/features/booking/models/booking.dart';
+import 'features/notifications/index.dart';
+import 'core/models/notification.dart';
+import 'features/booking/index.dart';
 
 /// Demo screen for testing notification functionality
 class NotificationDemoScreen extends StatefulWidget {

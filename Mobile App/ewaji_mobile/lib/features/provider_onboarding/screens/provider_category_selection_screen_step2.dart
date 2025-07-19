@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../cubit/primary_category_cubit.dart';
-import '../models/primary_category.dart';
-import '../widgets/primary_category_selector.dart';
+import '../../auth/index.dart';
 
 /// Provider onboarding step 2/4: Primary Category Selection Screen
 class ProviderCategorySelectionScreenStep2 extends StatelessWidget {

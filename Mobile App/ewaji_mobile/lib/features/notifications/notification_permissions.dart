@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:ewaji_mobile/core/services/notification_service.dart';
-import 'package:ewaji_mobile/core/models/notification.dart';
+import 'notification_service.dart';
+import '../../core/models/notification.dart';
 
 /// Utility class for handling notification permissions
 class NotificationPermissionHandler {

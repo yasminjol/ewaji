@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'client_home_screen.dart';
-import 'client_explore_screen.dart';
-import 'client_appointments_screen.dart';
-import 'client_inbox_screen.dart';
-import 'client_profile_screen.dart';
+import 'home_screen.dart';
+import '../../discovery/index.dart';
+import '../../booking_management/index.dart';
+import '../../inbox/index.dart';
+import '../../settings/index.dart';
 
 class ClientApp extends StatefulWidget {
   final String initialTab;
@@ -20,7 +20,7 @@ class _ClientAppState extends State<ClientApp> {
   
   final List<Widget> _screens = [
     const ClientHomeScreen(),
-    const ClientExploreScreen(),
+    const DiscoveryPage(),
     const ClientAppointmentsScreen(),
     const ClientInboxScreen(),
     const ClientProfileScreen(),

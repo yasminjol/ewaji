@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../notification_demo.dart';
-import '../../core/services/notification_service.dart';
+import '../notifications/index.dart';
 
 class ProviderDashboardTabs extends StatefulWidget {
   const ProviderDashboardTabs({super.key});

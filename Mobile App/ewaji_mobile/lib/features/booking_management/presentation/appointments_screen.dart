@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../reviews/screens/review_submission_screen.dart';
-import '../reviews/bloc/review_bloc.dart';
-import '../reviews/repository/review_repository.dart';
+import '../../reviews/index.dart';
 
 class ClientAppointmentsScreen extends StatefulWidget {
   const ClientAppointmentsScreen({super.key});

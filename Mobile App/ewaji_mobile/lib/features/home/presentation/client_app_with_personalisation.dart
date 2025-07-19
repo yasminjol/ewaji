@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'cubit/personalisation_cubit.dart';
-import 'cubit/personalisation_state.dart';
+import '../../onboarding/index.dart';
 import 'client_app.dart';
 
 /// Wrapper that checks personalisation status before showing main client app
