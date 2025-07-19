@@ -13,11 +13,13 @@ lib/
     ├── auth/                  # C-01-A/B  (email/phone/OAuth, biometric)
     ├── onboarding/            # C-01-C  Personalisation Wizard
     ├── discovery/             # C-02-A/B  Feed, search, AI image match
+    ├── home/                  # C-02-D    Client home tab (feed + shortcuts)
     ├── service_detail/        # C-03-A/B/C  Provider profile, pricing
     ├── booking/               # C-04-A/B/C  Booking + payment + no-show
     ├── notifications/         # C-05-A  Push/SMS/email hub
     ├── reviews/               # C-06-A  Photo reviews & replies
     ├── settings/              # C-07-A  Client settings & prefs
+    ├── inbox/                 # C-05-B  Client messaging & notifications
     │
     ├── provider_onboarding/   # P-01-A/B/C  Reg, KYC, 2-category pick
     ├── provider_dashboard/    # P-02-A/B/C  Calendar + gap-filler
