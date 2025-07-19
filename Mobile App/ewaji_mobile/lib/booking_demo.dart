@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'features/service_detail/presentation/pages/service_detail_screen.dart';
-import 'features/service_detail/repository/service_detail_repository.dart';
-import 'features/service_detail/bloc/service_detail_bloc.dart';
-import 'features/booking/services/payment_service.dart';
+import 'features/service_detail/index.dart';
+import 'features/booking/index.dart';
 
 void main() {
   runApp(const BookingDemoApp());

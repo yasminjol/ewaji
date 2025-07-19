@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'features/discovery/presentation/pages/discovery_page.dart';
+import 'features/discovery/index.dart';
 
 void main() {
   runApp(const DiscoveryDemoApp());

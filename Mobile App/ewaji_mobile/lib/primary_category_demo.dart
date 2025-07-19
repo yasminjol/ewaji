@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-import 'features/auth/screens/provider_category_selection_screen_step2.dart';
+import 'features/auth/index.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

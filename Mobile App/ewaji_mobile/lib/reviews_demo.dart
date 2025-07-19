@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'features/reviews/bloc/review_bloc.dart';
-import 'features/reviews/repository/review_repository.dart';
-import 'features/reviews/screens/review_submission_screen.dart';
+import 'features/reviews/index.dart';
 
 void main() {
   runApp(const ReviewsDemoApp());

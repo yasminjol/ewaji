@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'features/auth/models/auth_user.dart';
-import 'features/auth/bloc/auth_state.dart';
-import 'features/auth/bloc/auth_event.dart';
-import 'features/auth/widgets/login_screen.dart';
-import 'features/auth/widgets/biometric_lock_screen.dart';
-import 'features/auth/widgets/pin_lock_screen.dart';
-import 'features/auth/widgets/phone_verification_screen.dart';
+import 'features/auth/index.dart';
 
 void main() {
   runApp(const AuthDemoApp());

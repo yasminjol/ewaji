@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../features/service_detail/presentation/pages/service_detail_screen.dart';
+import 'features/service_detail/index.dart';
 
 class ServiceDetailDemo extends StatelessWidget {
   const ServiceDetailDemo({super.key});

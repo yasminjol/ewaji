@@ -6,7 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:ewaji_mobile/core/models/notification.dart';
-import 'package:ewaji_mobile/features/booking/models/booking.dart';
+import 'package:ewaji_mobile/features/booking/index.dart';
 
 /// Singleton service for managing notifications
 class NotificationService {
