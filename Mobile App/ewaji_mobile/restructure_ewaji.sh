@@ -42,9 +42,41 @@ echo "export 'notification_service.dart';" > lib/features/notifications/notifica
 
 echo "export 'screens/provider_category_selection_screen_step2.dart';" > lib/features/provider_onboarding/provider_onboarding.dart
 
-# ── 6. Update imports in affected files ──────────────────
+# ── 6. Helper function to skip missing paths ─────────────
+move() { [ -e "$1" ] && git mv "$1" "$2" \
+      && echo "moved $1 → $2" || echo "⚠️  skipped $1"; }
+
+# ── 7. Relocate remaining client screens ─────────────────
+# ----  Home screen  -------------------------------------------------
+mkdir -p lib/features/home/presentation
+move lib/features/client/client_home_screen.dart \
+     lib/features/home/presentation/home_screen.dart
+
+# ----  Inbox screen  ------------------------------------------------
+mkdir -p lib/features/inbox/presentation
+move lib/features/client/client_inbox_screen.dart \
+     lib/features/inbox/presentation/inbox_screen.dart
+
+# ----  Appointments  (booking management)  -------------------------
+mkdir -p lib/features/booking_management/presentation
+move lib/features/client/client_appointments_screen.dart \
+     lib/features/booking_management/presentation/appointments_screen.dart
+
+# ----  Profile  (settings)  ----------------------------------------
+mkdir -p lib/features/settings/presentation
+move lib/features/client/client_profile_screen.dart \
+     lib/features/settings/presentation/profile_screen.dart
+
+# ----  Explore screen  ---------------------------------------------
+# If Explore == Discovery, just delete it; otherwise choose a proper feature.
+rm lib/features/client/client_explore_screen.dart 2>/dev/null || true
+
+# ----  Remove now-empty folder (ignore error if not empty) ----------
+rmdir lib/features/client 2>/dev/null || echo "client folder not empty—check manually"
+
+# ── 8. Update imports in affected files ──────────────────
 # This will require manual updates to import statements
 
-# ── 7. Commit the corrected structural refactor ──────────
+# ── 9. Commit the final structural refactor ──────────────
 git add .
-git commit -m "chore(structure): align folders with ewaji_feature_map"
+git commit -m "chore(structure): remove client folder & relocate screens"
