@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-import 'features/auth/index.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -122,7 +121,9 @@ class _DemoNavigationWrapperState extends State<DemoNavigationWrapper> {
       case 1:
         return _buildStep1();
       case 2:
-        return const PrimaryCategoryDemo();
+        return const Center(
+          child: Text('Primary Category Selection Demo\n(Placeholder)'),
+        );
       case 3:
         return _buildStep3();
       case 4:

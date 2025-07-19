@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:image/image.dart' as img;
 
 /// Face blur service for protecting privacy in review images
@@ -25,32 +24,6 @@ class FaceBlurService {
   /// Dispose of resources
   static void dispose() {
     // TODO: Implement disposal when face detector is available
-  }
-}
-
-      // Save the processed image to a new file
-      final processedBytes = img.encodeJpg(blurredImage, quality: 90);
-      
-      // Create a new file with "_blurred" suffix
-      final originalPath = imageFile.path;
-      final extension = originalPath.split('.').last;
-      final nameWithoutExtension = originalPath.substring(0, originalPath.lastIndexOf('.'));
-      final blurredPath = '${nameWithoutExtension}_blurred.$extension';
-      
-      final blurredFile = File(blurredPath);
-      await blurredFile.writeAsBytes(processedBytes);
-      
-      return blurredFile;
-    } catch (e) {
-      // If face detection fails, return original image
-      print('Face blur error: $e');
-      return imageFile;
-    }
-  }
-
-  /// Dispose of the face detector when no longer needed
-  void dispose() {
-    _faceDetector.close();
   }
 }
 
