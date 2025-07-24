@@ -74,6 +74,22 @@ class AuthPhoneVerificationCodeSubmitted extends AuthEvent {
 }
 
 /// Social authentication events
+enum SocialProvider { google, apple }
+
+class SocialLoginRequested extends AuthEvent {
+  const SocialLoginRequested({
+    required this.provider,
+    required this.userType,
+  });
+
+  final SocialProvider provider;
+  final UserType userType;
+
+  @override
+  List<Object> get props => [provider, userType];
+}
+
+// Legacy events for backward compatibility
 class AuthGoogleSignInRequested extends AuthEvent {
   const AuthGoogleSignInRequested({required this.userType});
 

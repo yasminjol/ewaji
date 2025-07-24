@@ -24,6 +24,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     on<AuthEmailSignUpRequested>(_onEmailSignUpRequested);
     on<AuthPhoneSignInRequested>(_onPhoneSignInRequested);
     on<AuthPhoneVerificationCodeSubmitted>(_onPhoneVerificationCodeSubmitted);
+    on<SocialLoginRequested>(_onSocialLoginRequested);
     on<AuthGoogleSignInRequested>(_onGoogleSignInRequested);
     on<AuthAppleSignInRequested>(_onAppleSignInRequested);
     on<AuthBiometricUnlockRequested>(_onBiometricUnlockRequested);
@@ -191,11 +192,45 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     }
   }
 
+  Future<void> _onSocialLoginRequested(
+    SocialLoginRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(state.copyWith(status: AuthStatus.socialLoginInProgress, clearError: true));
+
+    try {
+      AuthUser user;
+      
+      switch (event.provider) {
+        case SocialProvider.google:
+          user = await _authService.signInWithGoogle(userType: event.userType);
+          break;
+        case SocialProvider.apple:
+          user = await _authService.signInWithApple(userType: event.userType);
+          break;
+      }
+
+      final biometricAvailable = await _authService.isBiometricAvailable();
+
+      emit(state.copyWith(
+        status: AuthStatus.authenticated,
+        user: user,
+        biometricAvailable: biometricAvailable,
+        isNewUser: user.isNewUser,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: AuthStatus.error,
+        errorMessage: 'Social sign-in failed: ${e.toString()}',
+      ));
+    }
+  }
+
   Future<void> _onGoogleSignInRequested(
     AuthGoogleSignInRequested event,
     Emitter<AuthState> emit,
   ) async {
-    emit(state.copyWith(status: AuthStatus.loading, clearError: true));
+    emit(state.copyWith(status: AuthStatus.socialLoginInProgress, clearError: true));
 
     try {
       final user = await _authService.signInWithGoogle(
@@ -208,11 +243,12 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
         status: AuthStatus.authenticated,
         user: user,
         biometricAvailable: biometricAvailable,
+        isNewUser: user.isNewUser,
       ));
     } catch (e) {
       emit(state.copyWith(
         status: AuthStatus.error,
-        errorMessage: e.toString(),
+        errorMessage: 'Google sign-in failed: ${e.toString()}',
       ));
     }
   }
@@ -221,7 +257,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     AuthAppleSignInRequested event,
     Emitter<AuthState> emit,
   ) async {
-    emit(state.copyWith(status: AuthStatus.loading, clearError: true));
+    emit(state.copyWith(status: AuthStatus.socialLoginInProgress, clearError: true));
 
     try {
       final user = await _authService.signInWithApple(
@@ -234,11 +270,12 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
         status: AuthStatus.authenticated,
         user: user,
         biometricAvailable: biometricAvailable,
+        isNewUser: user.isNewUser,
       ));
     } catch (e) {
       emit(state.copyWith(
         status: AuthStatus.error,
-        errorMessage: e.toString(),
+        errorMessage: 'Apple sign-in failed: ${e.toString()}',
       ));
     }
   }

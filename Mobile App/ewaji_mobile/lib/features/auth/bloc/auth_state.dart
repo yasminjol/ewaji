@@ -9,6 +9,7 @@ enum AuthStatus {
   biometricLocked,
   pinLocked,
   phoneVerificationPending,
+  socialLoginInProgress,
   error,
 }
 
@@ -21,6 +22,7 @@ class AuthState extends Equatable {
     this.biometricAvailable = false,
     this.biometricEnabled = false,
     this.pinEnabled = false,
+    this.isNewUser = false,
   });
 
   final AuthStatus status;
@@ -30,9 +32,10 @@ class AuthState extends Equatable {
   final bool biometricAvailable;
   final bool biometricEnabled;
   final bool pinEnabled;
+  final bool isNewUser;
 
   bool get isAuthenticated => status == AuthStatus.authenticated && user != null;
-  bool get isLoading => status == AuthStatus.loading;
+  bool get isLoading => status == AuthStatus.loading || status == AuthStatus.socialLoginInProgress;
   bool get hasError => status == AuthStatus.error && errorMessage != null;
   bool get requiresPhoneVerification => status == AuthStatus.phoneVerificationPending;
   bool get isLocked => status == AuthStatus.biometricLocked || status == AuthStatus.pinLocked;
@@ -45,6 +48,7 @@ class AuthState extends Equatable {
     bool? biometricAvailable,
     bool? biometricEnabled,
     bool? pinEnabled,
+    bool? isNewUser,
     bool clearError = false,
     bool clearUser = false,
   }) {
@@ -56,6 +60,7 @@ class AuthState extends Equatable {
       biometricAvailable: biometricAvailable ?? this.biometricAvailable,
       biometricEnabled: biometricEnabled ?? this.biometricEnabled,
       pinEnabled: pinEnabled ?? this.pinEnabled,
+      isNewUser: isNewUser ?? this.isNewUser,
     );
   }
 
@@ -66,6 +71,7 @@ class AuthState extends Equatable {
       'biometricAvailable': biometricAvailable,
       'biometricEnabled': biometricEnabled,
       'pinEnabled': pinEnabled,
+      'isNewUser': isNewUser,
     };
   }
 
@@ -79,6 +85,7 @@ class AuthState extends Equatable {
       biometricAvailable: json['biometricAvailable'] ?? false,
       biometricEnabled: json['biometricEnabled'] ?? false,
       pinEnabled: json['pinEnabled'] ?? false,
+      isNewUser: json['isNewUser'] ?? false,
     );
   }
 
@@ -91,5 +98,6 @@ class AuthState extends Equatable {
         biometricAvailable,
         biometricEnabled,
         pinEnabled,
+        isNewUser,
       ];
 }

@@ -12,6 +12,7 @@ class AuthUser extends Equatable {
     required this.userType,
     required this.isEmailVerified,
     this.isPhoneVerified = false,
+    this.isNewUser = false,
   });
 
   final String uid;
@@ -22,6 +23,7 @@ class AuthUser extends Equatable {
   final UserType userType;
   final bool isEmailVerified;
   final bool isPhoneVerified;
+  final bool isNewUser;
 
   bool get isFullyVerified => isEmailVerified && (phoneNumber == null || isPhoneVerified);
 
@@ -34,6 +36,7 @@ class AuthUser extends Equatable {
     UserType? userType,
     bool? isEmailVerified,
     bool? isPhoneVerified,
+    bool? isNewUser,
   }) {
     return AuthUser(
       uid: uid ?? this.uid,
@@ -44,6 +47,7 @@ class AuthUser extends Equatable {
       userType: userType ?? this.userType,
       isEmailVerified: isEmailVerified ?? this.isEmailVerified,
       isPhoneVerified: isPhoneVerified ?? this.isPhoneVerified,
+      isNewUser: isNewUser ?? this.isNewUser,
     );
   }
 
@@ -57,6 +61,7 @@ class AuthUser extends Equatable {
       'userType': userType.name,
       'isEmailVerified': isEmailVerified,
       'isPhoneVerified': isPhoneVerified,
+      'isNewUser': isNewUser,
     };
   }
 
@@ -73,6 +78,7 @@ class AuthUser extends Equatable {
       ),
       isEmailVerified: json['isEmailVerified'] as bool,
       isPhoneVerified: json['isPhoneVerified'] as bool? ?? false,
+      isNewUser: json['isNewUser'] as bool? ?? false,
     );
   }
 
@@ -86,5 +92,6 @@ class AuthUser extends Equatable {
         userType,
         isEmailVerified,
         isPhoneVerified,
+        isNewUser,
       ];
 }

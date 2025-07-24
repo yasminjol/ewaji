@@ -129,7 +129,7 @@ class AuthService {
       final userCredential = await _firebaseAuth.signInWithCredential(credential);
       await _storeUserType(userType);
 
-      return _convertToAuthUser(userCredential.user!, userType);
+      return _convertToAuthUser(userCredential.user!, userType, isNewUser: userCredential.additionalUserInfo?.isNewUser ?? false);
     } catch (e) {
       throw Exception('Google sign in failed: $e');
     }
@@ -159,7 +159,7 @@ class AuthService {
       final userCredential = await _firebaseAuth.signInWithCredential(oauthCredential);
       await _storeUserType(userType);
 
-      return _convertToAuthUser(userCredential.user!, userType);
+      return _convertToAuthUser(userCredential.user!, userType, isNewUser: userCredential.additionalUserInfo?.isNewUser ?? false);
     } catch (e) {
       throw Exception('Apple sign in failed: $e');
     }
@@ -326,7 +326,11 @@ class AuthService {
     await _storage.delete(key: _userTypeKey);
   }
 
-  app_models.AuthUser _convertToAuthUser(User firebaseUser, app_models.UserType userType) {
+  app_models.AuthUser _convertToAuthUser(
+    User firebaseUser, 
+    app_models.UserType userType, {
+    bool isNewUser = false,
+  }) {
     return app_models.AuthUser(
       uid: firebaseUser.uid,
       email: firebaseUser.email ?? '',
@@ -336,6 +340,7 @@ class AuthService {
       userType: userType,
       isEmailVerified: firebaseUser.emailVerified,
       isPhoneVerified: firebaseUser.phoneNumber != null,
+      isNewUser: isNewUser,
     );
   }
 

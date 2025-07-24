@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../auth/bloc/auth_bloc.dart';
+import '../auth/bloc/auth_event.dart';
+import '../auth/bloc/auth_state.dart';
+import '../auth/models/auth_user.dart';
 
 class ProviderLoginScreen extends StatefulWidget {
   const ProviderLoginScreen({super.key});
@@ -18,7 +23,22 @@ class _ProviderLoginScreenState extends State<ProviderLoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state.isAuthenticated) {
+          // Navigate to provider dashboard on successful login
+          context.go('/provider/dashboard');
+        } else if (state.hasError) {
+          // Show error message
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage ?? 'Authentication failed'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+      child: Scaffold(
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -335,7 +355,8 @@ class _ProviderLoginScreenState extends State<ProviderLoginScreen> {
           ),
         ),
       ),
-    );
+    ), // End of Scaffold
+    ); // End of BlocListener
   }
 
   void _signIn() async {
@@ -357,12 +378,14 @@ class _ProviderLoginScreenState extends State<ProviderLoginScreen> {
   }
 
   void _socialLogin(String provider) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('$provider login not implemented yet'),
-        backgroundColor: Colors.orange,
-      ),
-    );
+    final socialProvider = provider == 'Google' 
+        ? SocialProvider.google 
+        : SocialProvider.apple;
+    
+    context.read<AuthBloc>().add(SocialLoginRequested(
+      provider: socialProvider,
+      userType: UserType.provider,
+    ));
   }
 
   void _showForgotPasswordDialog() {

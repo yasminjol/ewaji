@@ -365,37 +365,50 @@ class _AuthLoginScreenState extends State<AuthLoginScreen>
   Widget _buildSocialSignInButtons() {
     return Column(
       children: [
-        // Google sign in
+        // Google sign in with new event and improved styling
         SizedBox(
           width: double.infinity,
-          child: OutlinedButton.icon(
-            onPressed: _signInWithGoogle,
-            icon: const Icon(Icons.g_mobiledata, color: Colors.red),
+          child: ElevatedButton.icon(
+            onPressed: () => _signInWithSocial(SocialProvider.google),
+            icon: Image.asset(
+              'assets/icons/google.png',
+              height: 24,
+              width: 24,
+              errorBuilder: (context, error, stackTrace) => 
+                const Icon(Icons.g_mobiledata, color: Colors.red, size: 24),
+            ),
             label: const Text('Continue with Google'),
-            style: OutlinedButton.styleFrom(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.black87,
+              side: const BorderSide(color: Colors.grey),
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
+              elevation: 0,
             ),
           ),
         ),
         
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
         
-        // Apple sign in (iOS only)
+        // Apple sign in (iOS only) with new event and improved styling
         if (Theme.of(context).platform == TargetPlatform.iOS)
           SizedBox(
             width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: _signInWithApple,
-              icon: const Icon(Icons.apple, color: Colors.black),
+            child: ElevatedButton.icon(
+              onPressed: () => _signInWithSocial(SocialProvider.apple),
+              icon: const Icon(Icons.apple, color: Colors.white),
               label: const Text('Continue with Apple'),
-              style: OutlinedButton.styleFrom(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
+                elevation: 0,
               ),
             ),
           ),
@@ -433,14 +446,9 @@ class _AuthLoginScreenState extends State<AuthLoginScreen>
     ));
   }
 
-  void _signInWithGoogle() {
-    context.read<AuthBloc>().add(AuthGoogleSignInRequested(
-      userType: _selectedUserType,
-    ));
-  }
-
-  void _signInWithApple() {
-    context.read<AuthBloc>().add(AuthAppleSignInRequested(
+  void _signInWithSocial(SocialProvider provider) {
+    context.read<AuthBloc>().add(SocialLoginRequested(
+      provider: provider,
       userType: _selectedUserType,
     ));
   }

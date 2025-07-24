@@ -1,0 +1,12 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Demo Social Auth Implementation",
+			"type": "shell",
+			"command": "flutter analyze lib/features/auth/bloc/ lib/features/auth/widgets/login_screen.dart lib/features/auth/auth_flow.dart lib/social_auth_demo.dart",
+			"group": "build",
+			"isBackground": false
+		}
+	]
+}

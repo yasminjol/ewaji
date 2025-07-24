@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'bloc/auth_bloc.dart';
+import 'bloc/auth_event.dart';
+import 'bloc/auth_state.dart';
+import 'models/auth_user.dart';
 
 class ClientLoginScreen extends StatefulWidget {
   const ClientLoginScreen({super.key});
@@ -16,7 +21,26 @@ class _ClientLoginScreenState extends State<ClientLoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state.status == AuthStatus.authenticated) {
+          if (state.user?.isNewUser == true) {
+            // Navigate to onboarding for new users
+            context.go('/client/onboarding');
+          } else {
+            // Navigate to client dashboard for existing users
+            context.go('/client/dashboard');
+          }
+        } else if (state.status == AuthStatus.error) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage ?? 'Authentication failed'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+      child: Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -145,6 +169,62 @@ class _ClientLoginScreenState extends State<ClientLoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 24),
+                    
+                    // Divider
+                    const Row(
+                      children: [
+                        Expanded(child: Divider(color: Color(0xFFE5E7EB))),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          child: Text(
+                            'or',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF6B7280),
+                            ),
+                          ),
+                        ),
+                        Expanded(child: Divider(color: Color(0xFFE5E7EB))),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Social Login Buttons
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: () => _socialLogin('Google'),
+                            icon: const Text('G', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red)),
+                            label: const Text('Google'),
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(color: Color(0xFFE5E7EB)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: () => _socialLogin('Apple'),
+                            icon: const Icon(Icons.apple, size: 16),
+                            label: const Text('Apple'),
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(color: Color(0xFFE5E7EB)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -171,7 +251,19 @@ class _ClientLoginScreenState extends State<ClientLoginScreen> {
           ),
         ),
       ),
+    ),
     );
+  }
+
+  void _socialLogin(String provider) {
+    final socialProvider = provider.toLowerCase() == 'google' 
+        ? SocialProvider.google 
+        : SocialProvider.apple;
+    
+    context.read<AuthBloc>().add(SocialLoginRequested(
+      provider: socialProvider,
+      userType: UserType.client,
+    ));
   }
 
   @override

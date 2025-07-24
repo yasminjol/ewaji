@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'features/auth/index.dart';
 import 'features/onboarding/index.dart';
@@ -17,14 +15,8 @@ import 'notification_demo.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialize HydratedBloc storage for state persistence
-  HydratedBloc.storage = await HydratedStorage.build(
-    storageDirectory: await getApplicationDocumentsDirectory(),
-  );
-  
-  // Skip Firebase initialization for now to avoid white screen
-  // TODO: Configure Firebase properly
-  // await AuthInitializer.initialize();
+  // Initialize Firebase and HydratedBloc storage
+  await AuthInitializer.initialize();
   
   runApp(const EwajiApp());
 }
@@ -34,16 +26,19 @@ class EwajiApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'EWAJI',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        primaryColor: const Color(0xFF5E50A1),
-        scaffoldBackgroundColor: Colors.white,
-        fontFamily: 'Inter',
-        useMaterial3: true,
+    return BlocProvider(
+      create: (context) => AuthRepository.createAuthBloc(),
+      child: MaterialApp.router(
+        title: 'EWAJI',
+        theme: ThemeData(
+          primarySwatch: Colors.deepPurple,
+          primaryColor: const Color(0xFF5E50A1),
+          scaffoldBackgroundColor: Colors.white,
+          fontFamily: 'Inter',
+          useMaterial3: true,
+        ),
+        routerConfig: _router,
       ),
-      routerConfig: _router,
     );
   }
 }
